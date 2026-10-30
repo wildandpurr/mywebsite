@@ -30,4 +30,4 @@ This is a fully static site. Drop the contents into any of:
 - AWS S3 + CloudFront
 - Any web server that can serve static files
 
-Built with NoCodeXport — https://nocodexport.com .
+Built with NoCodeXport — https://nocodexport.com
