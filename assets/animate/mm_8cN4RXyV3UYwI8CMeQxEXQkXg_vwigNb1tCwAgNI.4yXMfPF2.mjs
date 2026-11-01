@@ -1,1 +1,0 @@
-import{a as e,c as t,o as n,s as r}from"/assets/animate/shared-lib.DoCb0JLw.mjs";r();export{n as __FramerMetadata__,e as default,t as queryParamNames};
