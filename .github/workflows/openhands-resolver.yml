@@ -21,7 +21,7 @@ jobs:
         uses: All-Hands-AI/openhands-action@v1
         with:
           llm_api_key: ${{ secrets.LLM_API_KEY }}
-          llm_model: "google/gemini-1.5-pro"
+          llm_model: "google/gemini-2.5-pro"
           prompt: |
             Fix the website issue described in this GitHub issue. 
             The specific bug is that updated text and the logo image flash briefly upon loading before reverting to their old states. 
