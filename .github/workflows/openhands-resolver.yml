@@ -1,0 +1,28 @@
+name: OpenHands Free Issue Resolver
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  resolve-issue:
+    if: github.event.label.name == 'fix-me'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run OpenHands Resolver
+        uses: xinbenlv/openhands-action@v1
+        with:
+          llm_api_key: ${{ secrets.LLM_API_KEY }}
+          llm_model: "google/gemini-1.5-pro"
+          prompt: |
+            Fix the website issue described in this GitHub issue. 
+            The specific bug is that updated text and the logo image flash briefly upon loading before reverting to their old states. 
+            Search for cache mismatches, framework hydration errors, or hardcoded fallback states in the code and resolve them.
