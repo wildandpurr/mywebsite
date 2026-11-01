@@ -43,7 +43,7 @@ from pathlib import Path
 #   icon  key into ICON_BODIES below
 #   label the visible banner text, reproduced verbatim from the brief
 #   url   a real link, or '#' when no live URL exists yet (clean placeholder)
-#   theme banner background: wp / sofia / studio
+#   theme banner background: wp / sofia / studio / kofi
 # --------------------------------------------------------------------------
 LINKS = [
     ('tiktok',    'TikTok · Wild and Purr',
@@ -54,10 +54,10 @@ LINKS = [
      'https://www.tiktok.com/@sofiatinagraf',          'sofia'),
     ('youtube',   'YouTube · Our music channel',
      'Mirildan Meltem Studio on YouTube',
-     'https://www.youtube.com/@MirildanMeltemStudio',  'wp'),
+     'https://www.youtube.com/@MirildanMeltemStudio',  'studio'),
     ('kofi',      'Ko-fi · Support our creative world',
      'Support Wild and Purr on Ko-fi',
-     'https://ko-fi.com/wildandpurr',                  'wp'),
+     'https://ko-fi.com/wildandpurr',                  'kofi'),
     ('amazon',    'Amazon · Wild and Purr – coming soon',
      'Wild and Purr on Amazon',
      '#',                                              'wp'),
@@ -79,10 +79,14 @@ LINKS = [
     ('instagram', 'Instagram · Mirildan Meltem Studio',
      'Mirildan Meltem Studio on Instagram',
      '#',                                              'studio'),
+    ('pinterest', 'Pinterest · Wild and Purr',
+     'Wild and Purr on Pinterest',
+     'https://uk.pinterest.com/wildandpurr/',          'wp'),
 ]
 
-# Exact brand colours from the brief. Do not substitute shades.
-BG = {'wp': '#EFEBE9', 'sofia': '#E1D4F9', 'studio': '#FFF4B5'}
+# Banner background per theme. wp/sofia/studio come from the original brief;
+# kofi is the pastel coffee tone requested for the Ko-fi banner.
+BG = {'wp': '#EFEBE9', 'sofia': '#E1D4F9', 'studio': '#FFF4B5', 'kofi': '#CEC3BA'}
 
 # Self-contained mask glyphs (no external sprite). Each becomes
 # ``.framer-lkic--<name>{mask-image:url('data:image/svg+xml,<svg ...>')}``.
@@ -92,7 +96,8 @@ ICON_BODIES = {
     "kofi": "<svg display=\"block\" role=\"presentation\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M 0 5.516 C 0 3.238 1.404 1.196 3.532 0.381 C 5.659 -0.435 8.068 0.146 9.591 1.84 C 9.697 1.954 9.845 2.018 10 2.018 C 10.155 2.018 10.303 1.954 10.409 1.84 C 11.927 0.135 14.343 -0.453 16.475 0.364 C 18.607 1.181 20.011 3.233 20 5.516 C 20 7.806 18.5 9.516 17 11.016 L 11.508 16.329 C 11.131 16.762 10.586 17.012 10.012 17.016 C 9.438 17.02 8.89 16.776 8.508 16.348 L 3 11.016 C 1.5 9.516 0 7.816 0 5.516\" fill=\"var(--t829wi, rgb(0,0,0))\"/></svg>",
     "amazon": "<svg display=\"block\" role=\"presentation\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"var(--t829wi, rgb(0,0,0))\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6.5 8h11l.9 11.5H5.6L6.5 8Z\"/><path d=\"M9.5 8V6.2a2.5 2.5 0 0 1 5 0V8\"/></g></svg>",
     "bookvaib": "<svg display=\"block\" role=\"presentation\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"var(--t829wi, rgb(0,0,0))\" stroke-width=\"2\" stroke-linejoin=\"round\"><path d=\"M12 7C9.5 5.2 6.5 4.6 4 5V18c2.5-.4 5.5.2 8 2\"/><path d=\"M12 7c2.5-1.8 5.5-2.4 8-2V18c-2.5-.4-5.5.2-8 2\"/><path d=\"M12 7v13\"/></g></svg>",
-    "instagram": "<svg display=\"block\" role=\"presentation\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"var(--t829wi, rgb(0,0,0))\" stroke-width=\"2\"><rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"5.5\"/><circle cx=\"12\" cy=\"12\" r=\"4.2\"/></g><circle cx=\"17.4\" cy=\"6.6\" r=\"1.3\" fill=\"var(--t829wi, rgb(0,0,0))\"/></svg>"
+    "instagram": "<svg display=\"block\" role=\"presentation\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"var(--t829wi, rgb(0,0,0))\" stroke-width=\"2\"><rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"5.5\"/><circle cx=\"12\" cy=\"12\" r=\"4.2\"/></g><circle cx=\"17.4\" cy=\"6.6\" r=\"1.3\" fill=\"var(--t829wi, rgb(0,0,0))\"/></svg>",
+    "pinterest": "<svg display=\"block\" role=\"presentation\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z\" fill=\"var(--t829wi, rgb(0,0,0))\"/></svg>"
 }
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -160,16 +165,17 @@ def css_block():
         'display:flex;flex-flow:row;flex:none;place-content:center flex-start;'
         'align-items:center;gap:20px;width:100%;padding:24px;text-decoration:none;'
         'position:relative}',
-        '.framer-lk--wp{background-color:%s}' % BG['wp'],
-        '.framer-lk--sofia{background-color:%s}' % BG['sofia'],
-        '.framer-lk--studio{background-color:%s}' % BG['studio'],
+    ]
+    for theme, colour in BG.items():
+        rules.append('.framer-lk--%s{background-color:%s}' % (theme, colour))
+    rules.extend([
         '.framer-lkic{flex:none;width:28px;height:28px;aspect-ratio:1;'
         'background-color:#282526;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;'
         '-webkit-mask-position:center;mask-position:center;'
         '-webkit-mask-size:contain;mask-size:contain}',
         '.framer-lkt{white-space:pre-wrap;word-break:break-word;word-wrap:break-word;'
         'flex:1 0 0;width:1px;height:auto;position:relative}',
-    ]
+    ])
     for name, body in ICON_BODIES.items():
         uri = mask_uri(body)
         rules.append('.framer-lkic--%s{-webkit-mask-image:%s;mask-image:%s}'
@@ -252,6 +258,14 @@ def rename_bundle(old):
 
 
 def main():
+    # Fail early on a typo in a theme or icon name rather than emitting a banner
+    # with no background colour or a blank icon.
+    for icon, label, _aria, _url, theme in LINKS:
+        if theme not in BG:
+            sys.exit('unknown theme %r on %r' % (theme, label))
+        if icon not in ICON_BODIES:
+            sys.exit('unknown icon %r on %r' % (icon, label))
+
     bundle = bundle_path()
     index = INDEX.read_text(encoding='utf-8', newline='')
     script = bundle.read_text(encoding='utf-8')
