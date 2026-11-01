@@ -88,6 +88,12 @@ LINKS = [
 # kofi is the pastel coffee tone requested for the Ko-fi banner.
 BG = {'wp': '#EFEBE9', 'sofia': '#E1D4F9', 'studio': '#FFF4B5', 'kofi': '#F0DFCD'}
 
+# The hashtags line sits inside the same hydrated container as the banners, so
+# it is duplicated in the SSR markup and the bundle and must be kept in sync the
+# same way. Edit here, not in the generated files.
+HASHTAGS = ('#WildandPurr #SofiaTinaGraf #HiddenInTheEverydayBook '
+            '#WordSearchBook #MirildanMeltemStudio')
+
 # Self-contained mask glyphs (no external sprite). Each becomes
 # ``.framer-lkic--<name>{mask-image:url('data:image/svg+xml,<svg ...>')}``.
 ICON_BODIES = {
@@ -189,6 +195,26 @@ def unique(haystack, needle, what):
         sys.exit('anchor %r (%s) found %d times, expected 1' % (needle, what, n))
 
 
+def replace_hashtags_ssr(s):
+    """The hashtags paragraph sits inside the hydrated container, so it too
+    exists twice. Match the whole <p> by its prefix and rewrite its text."""
+    pat = re.compile(r'(<p class="framer-text framer-styles-preset-ett894"'
+                     r' data-styles-preset="F4MC6C3X_" dir="auto">)'
+                     r'#WildandPurr[^<]*(</p>)')
+    if len(pat.findall(s)) != 1:
+        sys.exit('SSR: expected exactly one hashtags paragraph, found %d'
+                 % len(pat.findall(s)))
+    return pat.sub(lambda m: m.group(1) + HASHTAGS + m.group(2), s)
+
+
+def replace_hashtags_bundle(s):
+    pat = re.compile(r'(children:`)#WildandPurr[^`]*(`)')
+    if len(pat.findall(s)) != 1:
+        sys.exit('bundle: expected exactly one hashtags string, found %d'
+                 % len(pat.findall(s)))
+    return pat.sub(lambda m: m.group(1) + HASHTAGS + m.group(2), s)
+
+
 def replace_ssr(s):
     unique(s, SSR_START, 'SSR first banner')
     unique(s, SSR_END, 'SSR hashtags block')
@@ -232,6 +258,7 @@ def update_meta():
         out = [p for p in paras if p not in wanted]
         anchor = next(n for n, p in enumerate(out)
                       if p.startswith(HASHTAGS_PREFIX))
+        out = [HASHTAGS if p.startswith(HASHTAGS_PREFIX) else p for p in out]
         data['/']['p'] = out[:anchor] + labels + out[anchor:]
         path.write_text(json.dumps(data, ensure_ascii=False,
                                    separators=(',', ':')), encoding='utf-8')
@@ -272,7 +299,9 @@ def main():
 
     index = replace_ssr(index)
     index = replace_css(index)
+    index = replace_hashtags_ssr(index)
     script = replace_bundle(script)
+    script = replace_hashtags_bundle(script)
 
     INDEX.write_text(index, encoding='utf-8', newline='')
     bundle.write_text(script, encoding='utf-8')
