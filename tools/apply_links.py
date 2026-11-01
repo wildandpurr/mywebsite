@@ -86,7 +86,7 @@ LINKS = [
 
 # Banner background per theme. wp/sofia/studio come from the original brief;
 # kofi is the pastel coffee tone requested for the Ko-fi banner.
-BG = {'wp': '#EFEBE9', 'sofia': '#E1D4F9', 'studio': '#FFF4B5', 'kofi': '#CEC3BA'}
+BG = {'wp': '#EFEBE9', 'sofia': '#E1D4F9', 'studio': '#FFF4B5', 'kofi': '#F0DFCD'}
 
 # Self-contained mask glyphs (no external sprite). Each becomes
 # ``.framer-lkic--<name>{mask-image:url('data:image/svg+xml,<svg ...>')}``.
