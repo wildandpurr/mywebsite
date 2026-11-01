@@ -37,6 +37,18 @@ The "Find us elsewhere" block lives in `index.html` and in the bundle under the
 `framer-1gey6qo` container, between the intro paragraph and the "Our hashtags" block.
 Banner labels are kept verbatim; section titles are not added inside the block.
 
+## Regenerating the links block
+Do **not** hand-edit the links block in `index.html` or the bundle. Edit `LINKS` in
+`tools/apply_links.py` and run it:
+
+    python3 tools/apply_links.py
+
+It is the single source of truth. It rewrites the SSR markup, the hydration bundle,
+the CSS (banner colours + icon masks) and the Framer search index together, then
+renames the bundle to a fresh content hash and repoints every reference. It is
+idempotent — running it twice changes nothing — and it fails loudly if a re-export
+moves the anchors it relies on.
+
 ## Verifying a change
 Serve the repo (`python3 -m http.server`) and confirm, in a browser, that the DOM does
 not change after hydration. A `MutationObserver` on `.framer-1gey6qo` should report
