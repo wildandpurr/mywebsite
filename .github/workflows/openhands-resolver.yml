@@ -17,6 +17,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Wymuszamy wersję 20, której wymaga wtyczka OpenHands
+
       - name: Run OpenHands Resolver
         uses: All-Hands-AI/openhands-github-action@v1
         env:
