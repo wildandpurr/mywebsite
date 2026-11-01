@@ -20,10 +20,6 @@ jobs:
       - name: Run OpenHands Resolver
         uses: All-Hands-AI/openhands-github-action@v1
         env:
-          LLM_MODEL: "github/gpt-4o"  # Przeniesione do sekcji środowiskowej (env)
+          LLM_MODEL: "github/gpt-4o"
         with:
           openhands-api-key: ${{ secrets.LLM_API_KEY }}
-          prompt: |
-            Fix the website issue described in this GitHub issue. 
-            The specific bug is that updated text and the logo image flash briefly upon loading before reverting to their old states. 
-            Search for cache mismatches, framework hydration errors, or hardcoded fallback states in the code and resolve them.
