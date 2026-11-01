@@ -18,11 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run OpenHands Resolver
-        uses: All-Hands-AI/openhands-action@v1
+        uses: All-Hands-AI/openhands-github-action@v1
         with:
-          llm_api_key: ${{ secrets.LLM_API_KEY }}
-          llm_model: "google/gemini-2.5-pro"
-          prompt: |
-            Fix the website issue described in this GitHub issue. 
-            The specific bug is that updated text and the logo image flash briefly upon loading before reverting to their old states. 
-            Search for cache mismatches, framework hydration errors, or hardcoded fallback states in the code and resolve them.
+          openhands-api-key: ${{ secrets.LLM_API_KEY }}
+          llm_model: "github/gpt-4o"  # Używa Twojego darmowego tokenu deweloperskiego GitHub
