@@ -37,9 +37,10 @@ The "Find us elsewhere" block lives in `index.html` and in the bundle under the
 `framer-1gey6qo` container, between the intro paragraph and the "Our hashtags" block.
 Banner labels are kept verbatim; section titles are not added inside the block.
 
-## Regenerating the links block
-Do **not** hand-edit the links block in `index.html` or the bundle. Edit `LINKS` in
-`tools/apply_links.py` and run it:
+## Regenerating the links block and page text
+Do **not** hand-edit the links block or any page copy in `index.html` or the bundle.
+Edit `LINKS` (banners), `HASHTAGS` (the hashtags line) or `TEXT` (all other page copy)
+in `tools/apply_links.py` and run it:
 
     python3 tools/apply_links.py
 
@@ -48,6 +49,29 @@ the CSS (banner colours + icon masks) and the Framer search index together, then
 renames the bundle to a fresh content hash and repoints every reference. It is
 idempotent — running it twice changes nothing — and it fails loudly if a re-export
 moves the anchors it relies on.
+
+`TEXT` is keyed by the `framer-XXXX` class of the wrapper element that holds each
+string. That class is the join key: it appears as `class="framer-XXXX"` in
+`index.html` and as ``className:`framer-XXXX` `` in the bundle, so both copies of a
+string can be found and rewritten without matching on the text itself.
+
+## Hand-editing a string by hand (no script)
+If you must edit without the script, the same string exists in **three** places and
+all three must be changed, or the browser shows your new text and then reverts it on
+hydration:
+
+1. `index.html` — the SSR markup (what paints first).
+2. `assets/animate/shared-lib.<hash>.mjs` — inside ``children:`...` ``, immediately
+   before ``className:`framer-XXXX` ``.
+3. `assets/meta/meta-*.json` — both files, in the `"/" -> "p"` array (only for
+   strings that appear there; headings usually do not).
+
+Then **rename the bundle** to a new content hash and update the three references to
+it in `index.html` (`script src`, `modulepreload`, meta paths) — or just use the
+script, which does all of this for you.
+
+Rule of thumb: **colours and CSS are safe to hand-edit** (they live only in
+`index.html`). **Any visible text is not** — it is duplicated and will revert.
 
 ## Verifying a change
 Serve the repo (`python3 -m http.server`) and confirm, in a browser, that the DOM does

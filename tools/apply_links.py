@@ -31,6 +31,7 @@ Then serve the repo and confirm the DOM does not change after hydration:
 
 import base64
 import hashlib
+import html
 import json
 import re
 import sys
@@ -94,6 +95,45 @@ BG = {'wp': '#EFEBE9', 'sofia': '#E1D4F9', 'studio': '#FFF4B5', 'kofi': '#F0DFCD
 HASHTAGS = ('#WildandPurr #SofiaTinaGraf #HiddenInTheEverydayBook '
             '#WordSearchBook #MirildanMeltemStudio')
 
+# --------------------------------------------------------------------------
+# PAGE TEXT - every visible string on the page, keyed by the framer class of the
+# wrapper element that holds it. That class is the same in index.html and in the
+# bundle, so it is the join key between the two copies.
+#
+# Edit the value, re-run the script, and both copies are updated together. Do
+# NOT hand-edit index.html for anything in this table: React would overwrite it
+# on hydration. Strings not listed here are not managed by this script.
+#
+# Keys marked "banner label" are owned by LINKS above; leave them alone.
+# --------------------------------------------------------------------------
+TEXT = {
+    'title':        'Wild and Purr',
+    'framer-15gmmv0': 'INDEPENDENT BOOKS AND MUSIC',
+    'framer-fyhsa4': 'Our home for stories, art, sounds, and everything we are '
+                     'creating next. We are just getting started, and much of '
+                     'this website is still under construction. More coming '
+                     'soon. We hope you will enjoy it.',
+    'framer-o8agl2': 'JUST GETTING STARTED',
+    'framer-planw1': 'Our first chapter is coming soon.',
+    'framer-8pkoyt': 'New books are on their way. This is where you\u2019ll find '
+                     'our upcoming titles, cover reveals, and release news.',
+    'framer-fefy1v': 'MEET ONE OF OUR AUTHORS',
+    'framer-zkgdkh': 'Sofia Tina Graf',
+    'framer-15f34k3': 'Sofia Tina Graf is an activity book author. Her first '
+                      'book, the beginning of a new collection, is coming soon.',
+    'framer-1htb9t2': 'MEET OUR MUSIC STUDIO',
+    'framer-gmow2t': 'Mirildan Meltem Studio',
+    'framer-17vy7e1': 'The musical side of our creative world. Mirildan Meltem '
+                      'Studio is just getting started, with music and more '
+                      'about the studio coming soon.',
+    'framer-11a7gwn': 'More from Wild and Purr',
+    'framer-9yttpo': 'Our social channels are new and mostly empty for now. '
+                     'You\u2019re welcome to follow as we begin adding books, '
+                     'music, and updates.',
+    'framer-1w68hq2': 'Our hashtags',
+    'framer-4p7c17':  '\u00a9 2026 Wild and Purr. Made for curious hearts.',
+}
+
 # Self-contained mask glyphs (no external sprite). Each becomes
 # ``.framer-lkic--<name>{mask-image:url('data:image/svg+xml,<svg ...>')}``.
 ICON_BODIES = {
@@ -121,6 +161,9 @@ BND_BANNER_START = '/*#__PURE__*/ c(`a`'
 CSS_START = '.framer-lk{'
 CSS_END = '</style><!-- Start of headEnd -->'
 HASHTAGS_PREFIX = '#WildandPurr'
+
+# Filled by main() with the managed strings as they currently appear on disk.
+OLD_TEXT = {}
 
 
 def bundle_path():
@@ -195,6 +238,72 @@ def unique(haystack, needle, what):
         sys.exit('anchor %r (%s) found %d times, expected 1' % (needle, what, n))
 
 
+def read_text_on_disk(index, script):
+    """Read back the current value of each managed string from index.html, so a
+    rename can be traced in the meta index (old value -> new value)."""
+    found = {}
+    for key in TEXT:
+        if key == 'title':
+            t = re.search(r'<title[^>]*>(.*?)</title>', index, re.S)
+            if t:
+                found[key] = t.group(1)
+            continue
+        pat = re.compile(r'<div class="%s"[^>]*><[ph][0-9]?[^>]*>(.*?)'
+                         r'</[ph][0-9]?>' % re.escape(key), re.S)
+        m = pat.search(index)
+        if m:
+            found[key] = html.unescape(m.group(1)).strip()
+    return found
+
+
+def _escape_html(s):
+    return (s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
+
+
+def apply_text_ssr(s):
+    """Rewrite the server-rendered copy of each managed string, matched by the
+    class of its wrapper div so we never touch an unrelated element."""
+    t = re.search(r'(<title[^>]*>)(.*?)(</title>)', s, re.S)
+    if not t:
+        sys.exit('index.html: <title> not found')
+    s = s[:t.start()] + t.group(1) + TEXT['title'] + t.group(3) + s[t.end():]
+
+    for key, value in TEXT.items():
+        if key == 'title':
+            continue
+        pat = re.compile(r'(<div class="%s"[^>]*>)(<[ph][0-9]?[^>]*>)(.*?)(</[ph][0-9]?>)'
+                         % re.escape(key), re.S)
+        hits = pat.findall(s)
+        if len(hits) != 1:
+            sys.exit('index.html: expected one text node under .%s, found %d'
+                     % (key, len(hits)))
+        s = pat.sub(lambda m: m.group(1) + m.group(2) + _escape_html(value)
+                    + m.group(4), s, count=1)
+    return s
+
+
+def apply_text_bundle(s):
+    """Rewrite the bundle's copy. Each string sits in children:`...` directly
+    before className:`<key>`, which is what makes it identifiable."""
+    for key, value in TEXT.items():
+        if key == 'title':
+            continue
+        anchor = 'className:`%s`' % key
+        if s.count(anchor) != 1:
+            sys.exit('bundle: className:`%s` found %d times, expected 1'
+                     % (key, s.count(anchor)))
+        at = s.index(anchor)
+        open_at = s.rfind('children:`', 0, at)
+        if open_at < 0:
+            sys.exit('bundle: no children:` before className:`%s`' % key)
+        close_at = s.index('`', open_at + len('children:`'))
+        if close_at > at:
+            sys.exit('bundle: children string for %s is not closed before '
+                     'className' % key)
+        s = s[:open_at] + 'children:`' + value + '`' + s[close_at + 1:]
+    return s
+
+
 def replace_hashtags_ssr(s):
     """The hashtags paragraph sits inside the hydrated container, so it too
     exists twice. Match the whole <p> by its prefix and rewrite its text."""
@@ -246,6 +355,9 @@ def replace_bundle(s):
 def update_meta():
     labels = [l[1] for l in LINKS]
     wanted = set(labels)
+    # Map every managed string to its current on-disk value, so the search index
+    # can be moved from old -> new without inventing or dropping entries.
+    managed = {k: v for k, v in TEXT.items() if k != 'title'}
     for path in META:
         data = json.loads(path.read_text(encoding='utf-8'))
         paras = data['/']['p']
@@ -260,6 +372,16 @@ def update_meta():
                       if p.startswith(HASHTAGS_PREFIX))
         out = [HASHTAGS if p.startswith(HASHTAGS_PREFIX) else p for p in out]
         data['/']['p'] = out[:anchor] + labels + out[anchor:]
+
+        # Refresh managed strings in place, matching on the previous value so a
+        # renamed string is found and updated rather than duplicated.
+        old_to_new = {}
+        for key, new in managed.items():
+            old = OLD_TEXT.get(key)
+            if old and old != new:
+                old_to_new[old] = new
+        if old_to_new:
+            data['/']['p'] = [old_to_new.get(p, p) for p in data['/']['p']]
         path.write_text(json.dumps(data, ensure_ascii=False,
                                    separators=(',', ':')), encoding='utf-8')
 
@@ -297,11 +419,18 @@ def main():
     index = INDEX.read_text(encoding='utf-8', newline='')
     script = bundle.read_text(encoding='utf-8')
 
+    # Snapshot the strings as they currently are on disk, so update_meta() can
+    # follow a rename from the old value to the new one.
+    global OLD_TEXT
+    OLD_TEXT = read_text_on_disk(index, script)
+
     index = replace_ssr(index)
     index = replace_css(index)
     index = replace_hashtags_ssr(index)
+    index = apply_text_ssr(index)
     script = replace_bundle(script)
     script = replace_hashtags_bundle(script)
+    script = apply_text_bundle(script)
 
     INDEX.write_text(index, encoding='utf-8', newline='')
     bundle.write_text(script, encoding='utf-8')
