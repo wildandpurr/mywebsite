@@ -127,18 +127,21 @@ Labels already read "coming soon" where applicable.
 Current `<title>` is `Wild and Purr`. A more descriptive option is
 `Wild and Purr — Independent Books & Music`. Purely optional.
 
-## Superseded branch
+## Branch cleanup (completed 2026-11-11)
 
-`docs/seo-outstanding-items` (`f9c01d8`) recorded an earlier version of these
-items, including the mobile prototype notes. Its mobile write-up is now out of
-date (option (a) shipped) and it is based on a pre-PR-#6 commit, so its
-`index.html` / `robots.txt` / `sitemap.xml` diffs are stale. This document
-supersedes it; the branch can be deleted once confirmed.
+All merged and superseded branches have been deleted. Only `main` and
+`plan/analytics-and-consent` remain.
 
-## Prototype branches — do not merge
-
-- `proto/mobile-responsive` (`54bb062`) — **DO NOT MERGE.** An isolated
-  exploratory prototype of the mobile layout. Option (a) superseded it; the
-  shipped fix is far smaller. Kept only for reference and can be deleted.
-- `feat/responsive-mobile` (`fc665c2`) — merged into `main` as `8069dda`; safe to
-  delete once the deploy is confirmed stable.
+- **Merged and deleted:** `feat/links-layout` (#3), `fix/hashtags-sync` (#4),
+  `feat/edit-all-text` (#5), `seo/canonical-and-foundations` (#6),
+  `feat/responsive-mobile` (`8069dda`), `fix/hydration-logo-text-revert`
+  (#2, squash-merged), `docs/responsive-and-deferrals` (#7),
+  `docs/prototype-reference-values` (#8).
+- **Superseded and deleted:** `docs/seo-outstanding-items` — an earlier version of
+  this document, stale and based on a pre-PR-#6 commit. Its still-relevant items
+  were folded into this document first.
+- **Prototype, deleted:** `proto/mobile-responsive` — an exploratory CSS prototype
+  (`DO NOT MERGE`) that option (a) superseded. Its tuned type scale and spacing
+  were captured in `docs/responsive-option-b.md` before deletion.
+- **Retained:** `plan/analytics-and-consent` holds `docs/analytics-consent-plan.md`,
+  which exists nowhere else. It is the parked analytics plan (see item 2 above).
