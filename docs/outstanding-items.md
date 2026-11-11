@@ -134,3 +134,11 @@ items, including the mobile prototype notes. Its mobile write-up is now out of
 date (option (a) shipped) and it is based on a pre-PR-#6 commit, so its
 `index.html` / `robots.txt` / `sitemap.xml` diffs are stale. This document
 supersedes it; the branch can be deleted once confirmed.
+
+## Prototype branches — do not merge
+
+- `proto/mobile-responsive` (`54bb062`) — **DO NOT MERGE.** An isolated
+  exploratory prototype of the mobile layout. Option (a) superseded it; the
+  shipped fix is far smaller. Kept only for reference and can be deleted.
+- `feat/responsive-mobile` (`fc665c2`) — merged into `main` as `8069dda`; safe to
+  delete once the deploy is confirmed stable.

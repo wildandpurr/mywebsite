@@ -29,7 +29,8 @@ page metadata. In the export it appears as:
 - `index.html` — the `<meta name="viewport">` tag.
 
 The runtime re-applies `width=1200` on hydration, which is why the static meta
-alone is not enough and the guard exists.
+alone is not enough and the guard exists. The call site is
+`meta[name="viewport"].setAttribute(...)` in `nocodexport.<hash>.mjs`.
 
 ## How to do (b)
 
