@@ -48,6 +48,21 @@ exported the site via NocodeXport has it.
 4. Preview across breakpoints inside Framer.
 5. Re-export via NocodeXport and replace `index.html` and `assets/` in the repo.
 
+## Reference values from the CSS prototype (branch `proto/mobile-responsive`, deleted)
+
+A throwaway CSS prototype once existed on branch `proto/mobile-responsive`. It is
+gone, but its **tuned values** are worth keeping as a starting point for the
+breakpoints above. It targeted Framer's generated class hashes, which change on
+every export, so the selectors themselves were not reusable — only the numbers.
+
+| Element | ≤768px | ≤400px |
+| --- | --- | --- |
+| Heading (`framer-styles-preset-hw1bwg`) | 26px | 23px |
+| Body (`framer-styles-preset-ett894`) | 17px | 16px |
+| Root padding | 24px 16px | — |
+| Link cards | 18px padding, 14px gap | — |
+| Content blocks | 20–24px padding | — |
+
 ## Re-apply checklist after any Framer re-export
 
 A re-export regenerates `index.html` and `assets/` wholesale. Everything applied
@@ -90,7 +105,12 @@ done
 
 ## Open questions
 
-1. Is the original Framer project available, and who holds it?
+1. ~~Is the original Framer project available, and who holds it?~~ **Answered.**
+   The export's source is recorded in `README.md`:
+   `https://gold-apps-845091.framer.app` (verified live 2026-11-11, still serving
+   "Wild and Purr"). The bundle also carries
+   `siteCanonicalURL:`https://gold-apps-845091.framer.app``. Whoever has access to
+   that Framer account holds the project.
 2. Do we want a purpose-built phone layout (stacked columns, larger type), or is
    the current fluid layout at native width sufficient? The live option (a)
    already makes the fluid layout usable; option (b) is only required for a
