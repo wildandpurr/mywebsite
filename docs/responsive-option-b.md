@@ -105,7 +105,12 @@ done
 
 ## Open questions
 
-1. Is the original Framer project available, and who holds it?
+1. ~~Is the original Framer project available, and who holds it?~~ **Answered.**
+   The export's source is recorded in `README.md`:
+   `https://gold-apps-845091.framer.app` (verified live 2026-11-11, still serving
+   "Wild and Purr"). The bundle also carries
+   `siteCanonicalURL:`https://gold-apps-845091.framer.app``. Whoever has access to
+   that Framer account holds the project.
 2. Do we want a purpose-built phone layout (stacked columns, larger type), or is
    the current fluid layout at native width sufficient? The live option (a)
    already makes the fluid layout usable; option (b) is only required for a
