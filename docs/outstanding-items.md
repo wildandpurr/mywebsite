@@ -82,3 +82,31 @@ Option (a) (device-width viewport + guard) is live. Option (b) — a proper Fram
 breakpoint layout — is described in `docs/responsive-option-b.md`, including the
 re-apply checklist needed because a Framer re-export overwrites `index.html` and
 `assets/`.
+
+## 6. Placeholder links (`href="#"`) — intentional
+
+**Status: no action until each destination exists.**
+
+Seven buttons on the homepage use `href="#"` on purpose. Do **not** remove them or
+invent URLs. Activate each only when its real destination is live:
+
+- Amazon — storefront and Sofia Tina Graf author page
+- Bookvaib — brand and author
+- Instagram — Wild and Purr, Sofia Tina Graf, Mirildan Meltem Studio
+
+Labels already read "coming soon" where applicable.
+
+## 7. Title tag refinement (optional)
+
+**Status: proposal only, needs sign-off.**
+
+Current `<title>` is `Wild and Purr`. A more descriptive option is
+`Wild and Purr — Independent Books & Music`. Purely optional.
+
+## Superseded branch
+
+`docs/seo-outstanding-items` (`f9c01d8`) recorded an earlier version of these
+items, including the mobile prototype notes. Its mobile write-up is now out of
+date (option (a) shipped) and it is based on a pre-PR-#6 commit, so its
+`index.html` / `robots.txt` / `sitemap.xml` diffs are stale. This document
+supersedes it; the branch can be deleted once confirmed.
