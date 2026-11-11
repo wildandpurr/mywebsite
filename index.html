@@ -7,7 +7,28 @@
 <html lang="en" dir="ltr">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=1200">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script data-viewport-fix>
+	// Framer re-applies the authored viewport ("width=1200") on hydration, which
+	// makes phones scale the desktop layout down to ~1/3 size. Pin the viewport to
+	// device-width and keep it pinned if anything overwrites it.
+	(function () {
+	  var m = document.querySelector('meta[name="viewport"]');
+	  if (!m) return;
+	  var WANT = "width=device-width, initial-scale=1";
+	  var setAttr = Element.prototype.setAttribute;
+	  m.setAttribute = function (name, value) {
+	    if (name === "content" && typeof value === "string" && /^\s*width=\d+/.test(value)) {
+	      value = WANT;
+	    }
+	    return setAttr.call(this, name, value);
+	  };
+	  setAttr.call(m, "content", WANT);
+	  new MutationObserver(function () {
+	    if (m.getAttribute("content") !== WANT) setAttr.call(m, "content", WANT);
+	  }).observe(m, { attributes: true, attributeFilter: ["content"] });
+	})();
+	</script>
 	<meta name="generator" content="Framer 6396d1e">
 	<title>Wild and Purr</title>
         <link rel="canonical" href="https://wildandpurr.com/">
