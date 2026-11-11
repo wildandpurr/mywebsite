@@ -77,3 +77,13 @@ Rule of thumb: **colours and CSS are safe to hand-edit** (they live only in
 Serve the repo (`python3 -m http.server`) and confirm, in a browser, that the DOM does
 not change after hydration. A `MutationObserver` on `.framer-1gey6qo` should report
 `mutations=0` and identical content before and after `load`.
+
+## Outstanding work and planning notes
+See `docs/outstanding-items.md` for deferred items (meta description wording,
+analytics, GSC sitemap, fb:app_id) and `docs/responsive-option-b.md` for the
+Framer breakpoint plan and the re-apply checklist that any Framer re-export
+requires (a re-export overwrites `index.html` and `assets/`).
+
+The mobile viewport fix (option a) is live: `index.html` sets
+`width=device-width` and pins it with a `<script data-viewport-fix>` guard,
+because the Framer runtime re-applies `width=1200` on hydration.
