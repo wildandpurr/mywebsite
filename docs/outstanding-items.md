@@ -21,6 +21,30 @@ noted.
   merge, or a Framer re-export. Nothing was changed at the time; the request was
   paused ("Stop. Leave it").
 
+### Exhaustive search for "creative discoveries" (2026-11-11)
+
+A merge was suspected as the source. Every avenue was checked; all were negative:
+
+- **Every blob in the object database** (all 108, reachable *and* dangling):
+  the only two hits are the two committed revisions of this document itself. No
+  other blob ever contained the phrase.
+- **Every branch tip** (all 11 remote branches): every one carries "creative
+  moments".
+- **Every merge commit** (5 in total: #3, #4, #5, #6, and the responsive merge):
+  none introduces the phrase.
+- **The one dangling commit** (`ab8f19d`, the mobile prototype, never on a
+  branch): also "creative moments".
+- **GitHub PR bodies, issue bodies, and all PR comments/reviews** (PRs #1–#6):
+  no hits.
+- **Commit messages, reflog, stash**: no hits.
+- **Conversation history**: the earliest event containing the phrase is the
+  user's own message at 2026-11-11 10:37. Every earlier occurrence of
+  "discover" is the unrelated verb ("discover what's coming next") or
+  "discoverability" from the audit brief.
+
+Conclusion: "creative discoveries" was never drafted, merged, or committed. It
+originated solely as the user's stated intent on 2026-11-11.
+
 ### Where the string lives (6 occurrences, 4 files)
 
 Changing it is not a one-line edit. The string is duplicated:
